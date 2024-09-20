@@ -19,7 +19,9 @@ def summarize_rules():
     input_content = json.loads(request.data)
 
     details = [
-        pf.head_01(input_content,'headline')
+        pf.head_01(input_content,'headline'),
+        pf.head_06(input_content,'headline'),
+        pf.head_09(input_content,'headline')
     ]
 
     summary = {

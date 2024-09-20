@@ -94,5 +94,49 @@ def head_10(text,part):
 
     return res
 
+def head_11(text,part):
+    """
+    Head-11
 
+    Inputs needed: headline
+    """
+    req = text[part]
+    res = { 'ruleCode': 'Head-11', 'ruleResult': '', 'resultDesc': '' }
+
+    wordlist = req.lower().split(" ")
+    numbers = ['one','two','three','four','five','six','seven','eight','nine','ten',
+               'eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen',
+               'twenty','thirty','fourty','fifty','sixty','seventy','eighty','ninety']
+    
+    res['ruleResult'] = 'PASS'
+    for i in wordlist:
+        if i in numbers:
+            res['ruleResult'] = 'FAIL'
+            res['resultDesc'] = 'Do not spell out numbers in the title. Use numerical digits instead.'
+        if i == '0':
+            res['ruleResult'] = 'FAIL'
+            res['resultDesc'] += ' Spell out \"zero\" instead of using \"0\"'                        
+
+    return res
+
+def head_12(text,part):
+    """
+    Head-12
+
+    Inputs needed: headline
+    """
+    req = text[part]
+    res = { 'ruleCode': 'Head-12', 'ruleResult': '', 'resultDesc': '' }
+
+    wordlist = req.split(" ")
+    colons = [i for i,n in enumerate(wordlist) if ":" in n]
+    checkCapitalization = [wordlist[j+1] for j in colons]
+
+    res['ruleResult'] = 'PASS'
+    for i in checkCapitalization:
+        if i[0].isalpha() and i[0].islower():
+            res['ruleResult'] = 'FAIL'
+            res['resultDesc'] = 'Capitalize the next word after every colon'
+
+    return res
 

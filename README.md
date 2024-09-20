@@ -1,6 +1,7 @@
 ## Setup
 - Setup a virtual environment
 - Run `pip install -r requirements.txt`
+- Run `init_nltk.py`
 - [Dev mode]: `flask run` initializes the app locally at `127.0.0.1:5000`
 
 ## Formats and standards

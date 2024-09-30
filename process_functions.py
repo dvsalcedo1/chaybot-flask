@@ -216,3 +216,21 @@ def url_01(text,part):
 
     return res
 
+def url_04(text,part):
+    """
+    URLs should not have punctuations
+
+    Inputs needed: body
+    """
+    req = text[part]
+    res = { 'ruleCode': 'Url-04', 'ruleResult': '', 'resultDesc': '' }
+
+    url = req.split("/")[-2]
+    res['ruleResult'] = 'PASS'
+    for i in url.split("-"):
+        if not i.isalnum():
+            res['ruleResult'] = 'FAIL'
+            res['resultDesc'] = 'URLs should not have punctuations'
+
+    return res
+

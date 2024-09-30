@@ -27,7 +27,10 @@ def summarize_rules():
         pf.head_12(input_content,'headline'),
         pf.subhead_01(input_content,'subhead'),
         pf.subhead_06(input_content,'subhead'),
-        pf.dateline_03(input_content,'body')
+        pf.dateline_03(input_content,'body'),
+        pf.url_01(input_content,'url'),
+        pf.url_04(input_content,'url'),
+        pf.url_06(input_content,'url')
     ]
 
     summary = {

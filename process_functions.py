@@ -234,3 +234,20 @@ def url_04(text,part):
 
     return res
 
+def url_06(text,part):
+    """
+    URLs should not begin with a number
+
+    Inputs needed: body
+    """
+    req = text[part]
+    res = { 'ruleCode': 'Url-06', 'ruleResult': '', 'resultDesc': '' }
+
+    url = req.split("/")[-2]
+    res['ruleResult'] = 'PASS'
+    if url.split("-")[0].isdigit():
+        res['ruleResult'] = 'FAIL'
+        res['resultDesc'] = 'URLs should not begin with a number'
+
+    return res
+

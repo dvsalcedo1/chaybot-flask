@@ -18,7 +18,7 @@ def rule_code(text,part):
     return res        
 
 
-
+### Headline
 def head_01(text,part):
     """
     Head-01: Headlines should not exceeed 70 characters
@@ -140,6 +140,7 @@ def head_12(text,part):
 
     return res
 
+### Subhead
 def subhead_01(text,part):
     """
     Subhead-01: Subhead should not exceed 200 characters
@@ -172,3 +173,23 @@ def subhead_06(text,part):
             res['ruleResult'] = 'FAIL'
             res['resultDesc'] = 'Subhead should have single quotes and not double quotes'
 
+### Dateline
+def dateline_03(text,part):
+    """
+    Metro Manila dateline should use MANILA, PHILIPPINES
+
+    Inputs needed: body
+    """
+    req = text[part]
+    res = { 'ruleCode': 'Dateline-03', 'ruleResult': '', 'resultDesc': '' }
+
+    dateline = ""
+    if "—" in req:
+        dateline = req.split("—")[0][:-1]
+        if "metro manila" in dateline.lower():
+            res['ruleResult'] = 'FAIL'
+            res['resultDesc'] = 'Metro Manila dateline should use MANILA, PHILIPPINES'
+    else:
+        res['ruleResult'] = 'PASS' # return pass if there is no dateline
+
+    return res

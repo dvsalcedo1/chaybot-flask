@@ -25,7 +25,9 @@ def summarize_rules():
         pf.head_10(input_content,'headline'),
         pf.head_11(input_content,'headline'),
         pf.head_12(input_content,'headline'),
-        pf.subhead_01(input_content,'subhead')
+        pf.subhead_01(input_content,'subhead'),
+        pf.subhead_06(input_content,'subhead'),
+        pf.dateline_03(input_content,'body')
     ]
 
     summary = {

@@ -184,12 +184,16 @@ def dateline_03(text,part):
     res = { 'ruleCode': 'Dateline-03', 'ruleResult': '', 'resultDesc': '' }
 
     dateline = ""
-    if "—" in req:
+    res['ruleResult'] = 'PASS'
+    if ("—" in req):
         dateline = req.split("—")[0][:-1]
-        if "metro manila" in dateline.lower():
-            res['ruleResult'] = 'FAIL'
-            res['resultDesc'] = 'Metro Manila dateline should use MANILA, PHILIPPINES'
+        if len(dateline) < 100:
+            if "metro manila" in dateline.lower():
+                res['ruleResult'] = 'FAIL'
+                res['resultDesc'] = 'Metro Manila dateline should use MANILA, PHILIPPINES'
+        else:
+            res['resultDesc'] = 'There was no dateline detected' 
     else:
-        res['ruleResult'] = 'PASS' # return pass if there is no dateline
+        res['resultDesc'] = 'There was no dateline detected' # return pass if there is no dateline
 
     return res

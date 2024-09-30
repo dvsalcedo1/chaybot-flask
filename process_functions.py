@@ -57,7 +57,7 @@ def head_06(text,part):
 
 def head_09(text,part):
     """
-    Head-09
+    Head-09: Headlines should have single quotes and not double quotes
 
     Inputs needed: headline
     """
@@ -74,7 +74,7 @@ def head_09(text,part):
 
 def head_10(text,part):
     """
-    Head-10
+    Head-10: Headlines should use en dash and not hyphen or colon when indicating source
 
     Inputs needed: headline
     """
@@ -96,7 +96,7 @@ def head_10(text,part):
 
 def head_11(text,part):
     """
-    Head-11
+    Head-11: Headlines should use digits and not spelled out numbers except for zero
 
     Inputs needed: headline
     """
@@ -121,7 +121,7 @@ def head_11(text,part):
 
 def head_12(text,part):
     """
-    Head-12
+    Head-12: Headline word after colon should be capitalized
 
     Inputs needed: headline
     """
@@ -137,6 +137,23 @@ def head_12(text,part):
         if i[0].isalpha() and i[0].islower():
             res['ruleResult'] = 'FAIL'
             res['resultDesc'] = 'Capitalize the next word after every colon'
+
+    return res
+
+def subhead_01(text,part):
+    """
+    Subhead-01: Subhead should not exceed 200 characters
+
+    Inputs needed: subhead 
+    """
+    req = text[part]
+    res = { 'ruleCode': 'Subhead-01', 'ruleResult': '', 'resultDesc': '' }
+
+    if len(req) < 200:
+        res['ruleResult'] = 'PASS'
+    else:
+        res['ruleResult'] = 'FAIL'
+        res['resultDesc'] = 'Subhead should not exceed 200 characters'
 
     return res
 

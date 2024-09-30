@@ -157,3 +157,18 @@ def subhead_01(text,part):
 
     return res
 
+def subhead_06(text,part):
+    """
+    Subhead-06: Subhead should have single quotes and not double quotes
+
+    Inputs needed: subhead
+    """
+    req = text[part]
+    res = { 'ruleCode': 'Subhead-06', 'ruleResult': '', 'resultDesc': '' }
+
+    res['ruleResult'] = 'PASS'
+    for i in req:
+        if i == "\"":
+            res['ruleResult'] = 'FAIL'
+            res['resultDesc'] = 'Subhead should have single quotes and not double quotes'
+

@@ -197,3 +197,22 @@ def dateline_03(text,part):
         res['resultDesc'] = 'There was no dateline detected' # return pass if there is no dateline
 
     return res
+
+### URL
+def url_01(text,part):
+    """
+    URLs should have 11 words max
+
+    Inputs needed: body
+    """
+    req = text[part]
+    res = { 'ruleCode': 'Url-01', 'ruleResult': '', 'resultDesc': '' }
+
+    url = req.split("/")[-2]
+    res['ruleResult'] = 'PASS'
+    if len(url.split("-")) > 11:
+        res['ruleResult'] = 'FAIL'
+        res['resultDesc'] = 'URLs should have 11 words max'
+
+    return res
+

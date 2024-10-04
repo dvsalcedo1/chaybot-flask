@@ -1,4 +1,8 @@
 from nltk.tag import pos_tag
+import spacy
+
+nlp = spacy.load('en_core_web_lg')
+
 # General format
 def rule_code(text,part):
     """
@@ -1042,12 +1046,6 @@ def politicolegal_04(text, **kwargs):
         offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
-def fix_format(func, result):
-    '''Reformat output to align with API expectations'''
-    return {'ruleCode': func.__name__, 
-            'ruleResult': 'FAIL' if len(result) else 'PASS', 
-            'resultDesc': rules[func.__name__]['ruleDesc']}
-
 rules = {
   'name_01': {'ruleDesc': 'Put periods in honorifics and suffixes, Mr Mrs Dr Jr Sr', 'function': name_01},
   'name_02': {'ruleDesc': 'Put periods in middle initials', 'function': name_02},
@@ -1063,7 +1061,7 @@ rules = {
   'agency_05': {'ruleDesc': 'No need to put the acronyms in parentheses for the United Nations and the European Union.', 'function': agency_05},
   'agency_09': {'ruleDesc': 'Senate and House of Representatives should always be capitalized', 'function': agency_09},
   'agency_12': {'ruleDesc': 'Use non-government organization, not non-governmental', 'function': agency_12},
-  'place_02': {'ruleDesc': 'URL should not contain CamSur or Gensan, it should be completely spelled out in the slug. They are acceptable everywhere else', 'function': place_02},
+  # 'place_02': {'ruleDesc': 'URL should not contain CamSur or Gensan, it should be completely spelled out in the slug. They are acceptable everywhere else', 'function': place_02},
   'place_06': {'ruleDesc': 'Spell out st., rd., ave., and blvd (street, avenue, road, boulevard)', 'function': place_06},
   'dates_01': {'ruleDesc': 'Spell out days and months', 'function': dates_01},
   'dates_02': {'ruleDesc': 'Day format on first mention: day of week, comma, month & Day', 'function': dates_02},
@@ -1107,3 +1105,9 @@ rules = {
   'politicolegal_03': {'ruleDesc': 'It’s plead guilty to, not plead guilty of.', 'function': politicolegal_03},
   'politicolegal_04': {'ruleDesc': 'It’s convicted of and acquitted of, not for', 'function': politicolegal_04}
   }
+
+def fix_format(func, result):
+    '''Reformat output to align with API expectations'''
+    return {'ruleCode': func.__name__, 
+            'ruleResult': 'FAIL' if len(result) else 'PASS', 
+            'resultDesc': rules[func.__name__]['ruleDesc']}

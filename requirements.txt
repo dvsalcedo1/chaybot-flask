@@ -8,5 +8,8 @@ joblib==1.4.2
 MarkupSafe==2.1.5
 nltk==3.9.1
 regex==2024.9.11
+spacy==3.7.5
+spacy-legacy==3.0.12
+spacy-loggers==1.0.5
 tqdm==4.66.5
 Werkzeug==3.0.4

@@ -1,44 +1,16 @@
+from helpers import get_context
 from nltk.tag import pos_tag
 import spacy
 
-nlp = spacy.load('en_core_web_lg')
-
-# General format
-def rule_code(text,part):
-    """
-    Rule Description
-
-    Inputs needed: [url, headline, subhead, body,...]
-    """
-    req = text[part]
-    res = { 'ruleCode': 'Rule Code', 'ruleResult': '', 'resultDesc': '' }
-
-    if req: #condition to pass
-        res['ruleResult'] = 'PASS'
-    else: #condition to fail
-        res['ruleResult'] = 'FAIL'
-        res['resultDesc'] = 'Some explanation why'
-
-    return res        
-
+# nlp = spacy.load('en_core_web_lg')
 
 ### Headline
-def head_01(text,part):
-    """
-    Head-01: Headlines should not exceeed 70 characters
-
-    Inputs needed: headline 
-    """
-    req = text[part]
-    res = { 'ruleCode': 'Head-01', 'ruleResult': '', 'resultDesc': '' }
-
-    if len(req) < 70:
-        res['ruleResult'] = 'PASS'
+def head_01(text):
+    '''Headlines should not exceeed 70 characters'''
+    if len(text) > 70:
+        return [text]
     else:
-        res['ruleResult'] = 'FAIL'
-        res['resultDesc'] = 'Headlines should not exceeed 70 characters'
-
-    return res
+        return []
 
 def head_06(text,part):
     """
@@ -255,62 +227,7 @@ def url_06(text,part):
 
     return res
 
-
-# nlp = spacy.load('en_core_web_lg')
-
-def get_context(text, start, end, context_size=2, context_unit='words'):
-    """
-    Helper function to extract context around a match, with context_size
-    specified in terms of characters, words, or sentences.
-
-    :param text: The full text to extract context from.
-    :param start: Start position of the match.
-    :param end: End position of the match.
-    :param context_size: Size of the context to extract.
-    :param context_unit: Unit of the context size ('chars', 'words', or 'sentences').
-    :return: Context string surrounding the match.
-    """
-    # Extract context by character length
-    if context_unit == 'chars':
-        context_start = max(0, start - context_size)
-        context_end = min(len(text), end + context_size)
-        context = text[context_start:context_end]
-
-    # Extract context by word count
-    elif context_unit == 'words':
-        words = re.findall(r'\S+', text)  # Split the text into words
-        start_word_idx = len(re.findall(r'\S+', text[:start]))
-        end_word_idx = len(re.findall(r'\S+', text[:end]))
-
-        context_start_idx = max(0, start_word_idx - context_size)
-        context_end_idx = min(len(words), end_word_idx + context_size)
-
-        context = ' '.join(words[context_start_idx:context_end_idx])
-
-    # Extract context by sentence count
-    elif context_unit == 'sentences':
-        # Split text into sentences (simple assumption: sentences end with punctuation followed by space)
-        sentences = re.split(r'(?<=[.!?])\s+(?=\S)', text)
-
-        # Approximate the start and end positions of the sentences based on character indices
-        cumulative_char_count = 0
-        start_sentence_idx, end_sentence_idx = 0, 0
-        for i, sentence in enumerate(sentences):
-            sentence_len = len(sentence)
-            if cumulative_char_count <= start <= cumulative_char_count + sentence_len:
-                start_sentence_idx = i
-            if cumulative_char_count <= end <= cumulative_char_count + sentence_len:
-                end_sentence_idx = i
-                break
-            cumulative_char_count += sentence_len + 1  # Add 1 for space after the sentence
-        context_start_idx = max(0, start_sentence_idx - context_size)
-        context_end_idx = min(len(sentences), end_sentence_idx + context_size)
-        context = ' '.join(sentences[context_start_idx:context_end_idx])
-
-    else:
-        raise ValueError("Invalid context_unit. Use 'chars', 'words', or 'sentences'.")
-    return context.strip()
-
+## Name
 def name_01(text, **kwargs):
   '''Put periods in common honorifics and suffixes'''
   honorifics = ['Mr', 'Mrs', 'Dr', 'Ms', 'Prof', 'Mx']
@@ -385,6 +302,7 @@ def name_05(text, **kwargs):
         offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
+## Position
 def position_05(text, **kwargs):
     '''Use lowercase for opposition senator and opposition lawmaker, whether with a name or not.'''
     offending_strings = []
@@ -444,6 +362,7 @@ def position_21(text, **kwargs):
             offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
+## Agency
 def agency_03(text, context_unit='sentences', context_size=1):
     '''If the full name and the acronym will be used in the same sentence, don’t put the acronym in parentheses next to the first mention.'''
     offending_strings = []
@@ -485,6 +404,7 @@ def agency_12(text, **kwargs):
         offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
+## Place
 # def place_02(text, **kwargs):
 #     '''URL should not contain CamSur or Gensan, it should be completely spelled out in the slug. They are acceptable everywhere else'''
 #     offending_strings = []
@@ -508,6 +428,7 @@ def place_06(text, **kwargs):
         offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
+## Dates
 def dates_01(text, **kwargs):
     '''Spell out days and months'''
     offending_strings = []
@@ -631,6 +552,7 @@ def dates_10(text, **kwargs):
         offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
+## Numbers
 def numbers_01(text, **kwargs):
     '''The general rule for exact numbers is to spell out zero to nine and use digits for 10 onwards'''
     offending_strings = []
@@ -913,6 +835,7 @@ def numbers_19(text, **kwargs):
             offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
+## Grammar
 def grammar_01(text, **kwargs):
     '''Use "results in", not "results to"'''
     offending_strings = []
@@ -956,6 +879,7 @@ def grammar_04(text, **kwargs):
                 offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
+## Punctuation
 def punctuation_01(text, **kwargs):
     '''Use the Oxford or serial comma'''
     offending_strings = []
@@ -1006,6 +930,7 @@ def punctuation_04(text, **kwargs):
         offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
+## Politicolegal
 def politicolegal_01(text, **kwargs):
     '''It’s charged with, not charged of'''
     offending_strings = []
@@ -1046,68 +971,68 @@ def politicolegal_04(text, **kwargs):
         offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
-rules = {
-  'name_01': {'ruleDesc': 'Put periods in honorifics and suffixes, Mr Mrs Dr Jr Sr', 'function': name_01},
-  'name_02': {'ruleDesc': 'Put periods in middle initials', 'function': name_02},
-  'name-03': {'ruleDesc': 'Sr. And Jr. should not have a comma separating it from the surname', 'function': name_03},
-  'name_04': {'ruleDesc': 'Don’t put periods in names like TJ, AJ, JC, etc.', 'function': name_04},
-  'name_05': {'ruleDesc': 'Names with de, dela, de la, del, de los, delos should not be capitalized if the first name is mentioned', 'function': name_05},
-  'position_05': {'ruleDesc': 'Use lowercase for opposition senator and opposition lawmaker, whether with a name or not.', 'function': position_05},
-  'position_09': {'ruleDesc': 'There is no hyphen in vice president, vice governor, vice mayor, etc.', 'function': position_09},
-  'position_10': {'ruleDesc': 'Use foreign secretary, not foreign affairs secretary', 'function': position_10},
-  'position_12': {'ruleDesc': 'When using then-(position), there should be a hyphen. Lowercase for the position.', 'function': position_12},
-  'position_21': {'ruleDesc': 'The Pope and the Dalai Lama are always capitalized.', 'function': position_21},
-  'agency_03': {'ruleDesc': 'If the full name and the acronym will be used in the same sentence, don’t put the acronym in parentheses next to the first mention.', 'function': agency_03},
-  'agency_05': {'ruleDesc': 'No need to put the acronyms in parentheses for the United Nations and the European Union.', 'function': agency_05},
-  'agency_09': {'ruleDesc': 'Senate and House of Representatives should always be capitalized', 'function': agency_09},
-  'agency_12': {'ruleDesc': 'Use non-government organization, not non-governmental', 'function': agency_12},
-  # 'place_02': {'ruleDesc': 'URL should not contain CamSur or Gensan, it should be completely spelled out in the slug. They are acceptable everywhere else', 'function': place_02},
-  'place_06': {'ruleDesc': 'Spell out st., rd., ave., and blvd (street, avenue, road, boulevard)', 'function': place_06},
-  'dates_01': {'ruleDesc': 'Spell out days and months', 'function': dates_01},
-  'dates_02': {'ruleDesc': 'Day format on first mention: day of week, comma, month & Day', 'function': dates_02},
-  'dates_03': {'ruleDesc': 'Never use yesterday, today, tomorrow, last week, last month, last year, next week, next month, next year', 'function': dates_03},
-  'dates_04': {'ruleDesc': 'Data format is Month Day, Year', 'function': dates_04},
-  'dates_05': {'ruleDesc': 'Use "in month year"', 'function': dates_05},
-  'dates_06': {'ruleDesc': 'When referring to decades, use yyyy-s', 'function': dates_06},
-  'dates_07': {'ruleDesc': 'nth year anniversary is wrong', 'function': dates_07},
-  'dates_08': {'ruleDesc': 'for am/pm, dont use periods', 'function': dates_08},
-  'dates_09': {'ruleDesc': 'if at top of the hour, no need to use :00', 'function': dates_09},
-  'dates_10': {'ruleDesc': "don't include 12 if using noon or midnight", 'function': dates_10},
-  'numbers_01': {'ruleDesc': 'The general rule for exact numbers is to spell out zero to nine and use digits for 10 onwards', 'function': numbers_01},
-  'numbers_02': {'ruleDesc': 'When describing age, use the format x-year-old but only if it is an adjective', 'function': numbers_02},
-  'numbers_03': {'ruleDesc': 'if using digits in a phrase, use only digits and not spelled out numbers', 'function': numbers_03},
-  'numbers_04': {'ruleDesc': 'If a sentence begins with a number, spell it out, unless it is a year', 'function': numbers_04},
-  'numbers_05': {'ruleDesc': 'When describing number ranges, use "to" and not hyphen', 'function': numbers_05},
-  'numbers_06': {'ruleDesc': 'Spell out first to ninth unless it is describing a congressional district, court, division, or military unit', 'function': numbers_06},
-  'numbers_07': {'ruleDesc': 'For top <number>, the word top is lowercase.', 'function': numbers_07},
-  'numbers_08': {'ruleDesc': 'using No. X should always be capitalized', 'function': numbers_08},
-  'numbers_09': {'ruleDesc': 'Never use XX-k to refer to thousands', 'function': numbers_09},
-  'numbers_10': {'ruleDesc': 'Use % and not percent, also separated by a space', 'function': numbers_10},
-  'numbers_11': {'ruleDesc': 'No need for .0 in percentages', 'function': numbers_11},
-  'numbers_12': {'ruleDesc': 'Spell out fractions', 'function': numbers_12},
-  'numbers_13': {'ruleDesc': 'Use P instead of Php, without space, $ and not USD', 'function': numbers_13},
-  'numbers_14': {'ruleDesc': 'multimillion, multibillion has no hyphen', 'function': numbers_14},
-  'numbers_15': {'ruleDesc': 'Use km/h not kph', 'function': numbers_15},
-  'numbers_16': {'ruleDesc': 'Use kWh not kwh', 'function': numbers_16},
-  'numbers_17': {'ruleDesc': 'For internet speeds, put a space between the number and the unit of measurement', 'function': numbers_17},
-  'numbers_18': {'ruleDesc': 'For temperatures, go straight to °C and °F.', 'function': numbers_18},
-  'numbers_19': {'ruleDesc': 'Use Roman numerals for World War I and World War II.', 'function': numbers_19},
-  'grammar_01': {'ruleDesc': 'use results in, not results to', 'function': grammar_01},
-  'grammar_02': {'ruleDesc': 'dont use "for" after seek/sought', 'function': grammar_02},
-  'grammar_03': {'ruleDesc': 'dont use "as" after called/dubbed', 'function': grammar_03},
-  'grammar_04': {'ruleDesc': '"on the other hand" should have "on the one hand" in the same paragraph', 'function': grammar_04},
-  'punctuation_01': {'ruleDesc': 'Use the Oxford or serial comma', 'function': punctuation_01},
-  'punctuation_02': {'ruleDesc': 'Capitalization after a colon:', 'function': punctuation_02},
-  'punctuation_03': {'ruleDesc': 'A dash is used to separate word/s. We commonly use the en dash (–), not the em dash (—), with spaces', 'function': punctuation_03},
-  'punctuation_04': {'ruleDesc': 'When words end with s, use just an apostrophe for the possessive form.', 'function': punctuation_04},
-  'politicolegal_01': {'ruleDesc': 'It’s charged with, not charged of', 'function': politicolegal_01},
-  'politicolegal_02': {'ruleDesc': 'It’s indicted for, not indicted of.', 'function': politicolegal_02},
-  'politicolegal_03': {'ruleDesc': 'It’s plead guilty to, not plead guilty of.', 'function': politicolegal_03},
-  'politicolegal_04': {'ruleDesc': 'It’s convicted of and acquitted of, not for', 'function': politicolegal_04}
-  }
+# rules = {
+#   'name_01': {'ruleDesc': 'Put periods in honorifics and suffixes, Mr Mrs Dr Jr Sr', 'function': name_01},
+#   'name_02': {'ruleDesc': 'Put periods in middle initials', 'function': name_02},
+#   'name-03': {'ruleDesc': 'Sr. And Jr. should not have a comma separating it from the surname', 'function': name_03},
+#   'name_04': {'ruleDesc': 'Don’t put periods in names like TJ, AJ, JC, etc.', 'function': name_04},
+#   'name_05': {'ruleDesc': 'Names with de, dela, de la, del, de los, delos should not be capitalized if the first name is mentioned', 'function': name_05},
+#   'position_05': {'ruleDesc': 'Use lowercase for opposition senator and opposition lawmaker, whether with a name or not.', 'function': position_05},
+#   'position_09': {'ruleDesc': 'There is no hyphen in vice president, vice governor, vice mayor, etc.', 'function': position_09},
+#   'position_10': {'ruleDesc': 'Use foreign secretary, not foreign affairs secretary', 'function': position_10},
+#   'position_12': {'ruleDesc': 'When using then-(position), there should be a hyphen. Lowercase for the position.', 'function': position_12},
+#   'position_21': {'ruleDesc': 'The Pope and the Dalai Lama are always capitalized.', 'function': position_21},
+#   'agency_03': {'ruleDesc': 'If the full name and the acronym will be used in the same sentence, don’t put the acronym in parentheses next to the first mention.', 'function': agency_03},
+#   'agency_05': {'ruleDesc': 'No need to put the acronyms in parentheses for the United Nations and the European Union.', 'function': agency_05},
+#   'agency_09': {'ruleDesc': 'Senate and House of Representatives should always be capitalized', 'function': agency_09},
+#   'agency_12': {'ruleDesc': 'Use non-government organization, not non-governmental', 'function': agency_12},
+#   # 'place_02': {'ruleDesc': 'URL should not contain CamSur or Gensan, it should be completely spelled out in the slug. They are acceptable everywhere else', 'function': place_02},
+#   'place_06': {'ruleDesc': 'Spell out st., rd., ave., and blvd (street, avenue, road, boulevard)', 'function': place_06},
+#   'dates_01': {'ruleDesc': 'Spell out days and months', 'function': dates_01},
+#   'dates_02': {'ruleDesc': 'Day format on first mention: day of week, comma, month & Day', 'function': dates_02},
+#   'dates_03': {'ruleDesc': 'Never use yesterday, today, tomorrow, last week, last month, last year, next week, next month, next year', 'function': dates_03},
+#   'dates_04': {'ruleDesc': 'Data format is Month Day, Year', 'function': dates_04},
+#   'dates_05': {'ruleDesc': 'Use "in month year"', 'function': dates_05},
+#   'dates_06': {'ruleDesc': 'When referring to decades, use yyyy-s', 'function': dates_06},
+#   'dates_07': {'ruleDesc': 'nth year anniversary is wrong', 'function': dates_07},
+#   'dates_08': {'ruleDesc': 'for am/pm, dont use periods', 'function': dates_08},
+#   'dates_09': {'ruleDesc': 'if at top of the hour, no need to use :00', 'function': dates_09},
+#   'dates_10': {'ruleDesc': "don't include 12 if using noon or midnight", 'function': dates_10},
+#   'numbers_01': {'ruleDesc': 'The general rule for exact numbers is to spell out zero to nine and use digits for 10 onwards', 'function': numbers_01},
+#   'numbers_02': {'ruleDesc': 'When describing age, use the format x-year-old but only if it is an adjective', 'function': numbers_02},
+#   'numbers_03': {'ruleDesc': 'if using digits in a phrase, use only digits and not spelled out numbers', 'function': numbers_03},
+#   'numbers_04': {'ruleDesc': 'If a sentence begins with a number, spell it out, unless it is a year', 'function': numbers_04},
+#   'numbers_05': {'ruleDesc': 'When describing number ranges, use "to" and not hyphen', 'function': numbers_05},
+#   'numbers_06': {'ruleDesc': 'Spell out first to ninth unless it is describing a congressional district, court, division, or military unit', 'function': numbers_06},
+#   'numbers_07': {'ruleDesc': 'For top <number>, the word top is lowercase.', 'function': numbers_07},
+#   'numbers_08': {'ruleDesc': 'using No. X should always be capitalized', 'function': numbers_08},
+#   'numbers_09': {'ruleDesc': 'Never use XX-k to refer to thousands', 'function': numbers_09},
+#   'numbers_10': {'ruleDesc': 'Use % and not percent, also separated by a space', 'function': numbers_10},
+#   'numbers_11': {'ruleDesc': 'No need for .0 in percentages', 'function': numbers_11},
+#   'numbers_12': {'ruleDesc': 'Spell out fractions', 'function': numbers_12},
+#   'numbers_13': {'ruleDesc': 'Use P instead of Php, without space, $ and not USD', 'function': numbers_13},
+#   'numbers_14': {'ruleDesc': 'multimillion, multibillion has no hyphen', 'function': numbers_14},
+#   'numbers_15': {'ruleDesc': 'Use km/h not kph', 'function': numbers_15},
+#   'numbers_16': {'ruleDesc': 'Use kWh not kwh', 'function': numbers_16},
+#   'numbers_17': {'ruleDesc': 'For internet speeds, put a space between the number and the unit of measurement', 'function': numbers_17},
+#   'numbers_18': {'ruleDesc': 'For temperatures, go straight to °C and °F.', 'function': numbers_18},
+#   'numbers_19': {'ruleDesc': 'Use Roman numerals for World War I and World War II.', 'function': numbers_19},
+#   'grammar_01': {'ruleDesc': 'use results in, not results to', 'function': grammar_01},
+#   'grammar_02': {'ruleDesc': 'dont use "for" after seek/sought', 'function': grammar_02},
+#   'grammar_03': {'ruleDesc': 'dont use "as" after called/dubbed', 'function': grammar_03},
+#   'grammar_04': {'ruleDesc': '"on the other hand" should have "on the one hand" in the same paragraph', 'function': grammar_04},
+#   'punctuation_01': {'ruleDesc': 'Use the Oxford or serial comma', 'function': punctuation_01},
+#   'punctuation_02': {'ruleDesc': 'Capitalization after a colon:', 'function': punctuation_02},
+#   'punctuation_03': {'ruleDesc': 'A dash is used to separate word/s. We commonly use the en dash (–), not the em dash (—), with spaces', 'function': punctuation_03},
+#   'punctuation_04': {'ruleDesc': 'When words end with s, use just an apostrophe for the possessive form.', 'function': punctuation_04},
+#   'politicolegal_01': {'ruleDesc': 'It’s charged with, not charged of', 'function': politicolegal_01},
+#   'politicolegal_02': {'ruleDesc': 'It’s indicted for, not indicted of.', 'function': politicolegal_02},
+#   'politicolegal_03': {'ruleDesc': 'It’s plead guilty to, not plead guilty of.', 'function': politicolegal_03},
+#   'politicolegal_04': {'ruleDesc': 'It’s convicted of and acquitted of, not for', 'function': politicolegal_04}
+#   }
 
-def fix_format(func, result):
-    '''Reformat output to align with API expectations'''
-    return {'ruleCode': func.__name__, 
-            'ruleResult': 'FAIL' if len(result) else 'PASS', 
-            'resultDesc': rules[func.__name__]['ruleDesc']}
+# def fix_format(func, result):
+#     '''Reformat output to align with API expectations'''
+#     return {'ruleCode': func.__name__, 
+#             'ruleResult': 'FAIL' if len(result) else 'PASS', 
+#             'resultDesc': rules[func.__name__]['ruleDesc']}

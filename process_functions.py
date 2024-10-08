@@ -22,13 +22,13 @@ def head_06(text,part):
     req = text[part]
     res = { 'ruleCode': 'Head-06', 'ruleResult': '', 'resultDesc': '' }
 
-    wordlist = req.split(' ')
+    # wordlist = req.split(' ')
 
-    res['ruleResult'] = 'PASS'
-    for i in wordlist:
-        if len(i) > 10:
-            res['ruleResult'] = 'FAIL'
-            res['resultDesc'] = 'One of the words in the headline is too long'
+    # res['ruleResult'] = 'PASS'
+    # for i in wordlist:
+    #     if len(i) > 10:
+    #         res['ruleResult'] = 'FAIL'
+    #         res['resultDesc'] = 'One of the words in the headline is too long'
 
     return res
 
@@ -973,20 +973,6 @@ def politicolegal_04(text, **kwargs):
     return offending_strings
 
 # rules = {
-#   'name_01': {'ruleDesc': 'Put periods in honorifics and suffixes, Mr Mrs Dr Jr Sr', 'function': name_01},
-#   'name_02': {'ruleDesc': 'Put periods in middle initials', 'function': name_02},
-#   'name-03': {'ruleDesc': 'Sr. And Jr. should not have a comma separating it from the surname', 'function': name_03},
-#   'name_04': {'ruleDesc': 'Don’t put periods in names like TJ, AJ, JC, etc.', 'function': name_04},
-#   'name_05': {'ruleDesc': 'Names with de, dela, de la, del, de los, delos should not be capitalized if the first name is mentioned', 'function': name_05},
-#   'position_05': {'ruleDesc': 'Use lowercase for opposition senator and opposition lawmaker, whether with a name or not.', 'function': position_05},
-#   'position_09': {'ruleDesc': 'There is no hyphen in vice president, vice governor, vice mayor, etc.', 'function': position_09},
-#   'position_10': {'ruleDesc': 'Use foreign secretary, not foreign affairs secretary', 'function': position_10},
-#   'position_12': {'ruleDesc': 'When using then-(position), there should be a hyphen. Lowercase for the position.', 'function': position_12},
-#   'position_21': {'ruleDesc': 'The Pope and the Dalai Lama are always capitalized.', 'function': position_21},
-#   'agency_03': {'ruleDesc': 'If the full name and the acronym will be used in the same sentence, don’t put the acronym in parentheses next to the first mention.', 'function': agency_03},
-#   'agency_05': {'ruleDesc': 'No need to put the acronyms in parentheses for the United Nations and the European Union.', 'function': agency_05},
-#   'agency_09': {'ruleDesc': 'Senate and House of Representatives should always be capitalized', 'function': agency_09},
-#   'agency_12': {'ruleDesc': 'Use non-government organization, not non-governmental', 'function': agency_12},
 #   # 'place_02': {'ruleDesc': 'URL should not contain CamSur or Gensan, it should be completely spelled out in the slug. They are acceptable everywhere else', 'function': place_02},
 #   'place_06': {'ruleDesc': 'Spell out st., rd., ave., and blvd (street, avenue, road, boulevard)', 'function': place_06},
 #   'dates_01': {'ruleDesc': 'Spell out days and months', 'function': dates_01},

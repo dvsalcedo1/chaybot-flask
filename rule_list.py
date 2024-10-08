@@ -16,6 +16,17 @@ rules = {
     'agency_05': {'function': agency_05, 'parts': ['body'], 'ruleDesc': 'No need to put the acronyms in parentheses for the United Nations and the European Union.'},
     'agency_09': {'function': agency_09, 'parts': ['body'], 'ruleDesc': 'Senate and House of Representatives should always be capitalized'},
     'agency_12': {'function': agency_12, 'parts': ['body'], 'ruleDesc': 'Use non-government organization, not non-governmental'},
+    'place_06': {'parts': ['body'], 'ruleDesc': 'Spell out st., rd., ave., and blvd (street, avenue, road, boulevard)', 'function': place_06},
+    'dates_01': {'function': dates_01, 'parts': ['body'], 'ruleDesc': 'Spell out days and months'},
+    'dates_02': {'function': dates_02, 'parts': ['body'], 'ruleDesc': 'Day format on first mention: day of week, comma, month & Day'},
+    'dates_03': {'function': dates_03, 'parts': ['body'], 'ruleDesc': 'Never use yesterday, today, tomorrow, last week, last month, last year, next week, next month, next year'},
+    'dates_04': {'function': dates_04, 'parts': ['body'], 'ruleDesc': 'Data format is Month Day, Year'},
+    'dates_05': {'function': dates_05, 'parts': ['body'], 'ruleDesc': 'Use "in month year"'},
+    'dates_06': {'function': dates_06, 'parts': ['body'], 'ruleDesc': 'When referring to decades, use yyyy-s'},
+    'dates_07': {'function': dates_07, 'parts': ['body'], 'ruleDesc': 'nth year anniversary is wrong'},
+    'dates_08': {'function': dates_08, 'parts': ['body'], 'ruleDesc': 'for am/pm, dont use periods'},
+    'dates_09': {'function': dates_09, 'parts': ['body'], 'ruleDesc': 'if at top of the hour, no need to use :00'},
+    'dates_10': {'function': dates_10, 'parts': ['body'], 'ruleDesc': "don't include 12 if using noon or midnight"},
 }
 
 def agg_details(input_content):

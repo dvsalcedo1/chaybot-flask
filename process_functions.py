@@ -3,7 +3,7 @@ from nltk.tag import pos_tag
 import spacy
 import re
 
-# nlp = spacy.load('en_core_web_lg')
+nlp = spacy.load('en_core_web_lg')
 
 ### Headline
 def head_01(text):
@@ -974,17 +974,7 @@ def politicolegal_04(text, **kwargs):
 
 # rules = {
 #   # 'place_02': {'ruleDesc': 'URL should not contain CamSur or Gensan, it should be completely spelled out in the slug. They are acceptable everywhere else', 'function': place_02},
-#   'place_06': {'ruleDesc': 'Spell out st., rd., ave., and blvd (street, avenue, road, boulevard)', 'function': place_06},
-#   'dates_01': {'ruleDesc': 'Spell out days and months', 'function': dates_01},
-#   'dates_02': {'ruleDesc': 'Day format on first mention: day of week, comma, month & Day', 'function': dates_02},
-#   'dates_03': {'ruleDesc': 'Never use yesterday, today, tomorrow, last week, last month, last year, next week, next month, next year', 'function': dates_03},
-#   'dates_04': {'ruleDesc': 'Data format is Month Day, Year', 'function': dates_04},
-#   'dates_05': {'ruleDesc': 'Use "in month year"', 'function': dates_05},
-#   'dates_06': {'ruleDesc': 'When referring to decades, use yyyy-s', 'function': dates_06},
-#   'dates_07': {'ruleDesc': 'nth year anniversary is wrong', 'function': dates_07},
-#   'dates_08': {'ruleDesc': 'for am/pm, dont use periods', 'function': dates_08},
-#   'dates_09': {'ruleDesc': 'if at top of the hour, no need to use :00', 'function': dates_09},
-#   'dates_10': {'ruleDesc': "don't include 12 if using noon or midnight", 'function': dates_10},
+
 #   'numbers_01': {'ruleDesc': 'The general rule for exact numbers is to spell out zero to nine and use digits for 10 onwards', 'function': numbers_01},
 #   'numbers_02': {'ruleDesc': 'When describing age, use the format x-year-old but only if it is an adjective', 'function': numbers_02},
 #   'numbers_03': {'ruleDesc': 'if using digits in a phrase, use only digits and not spelled out numbers', 'function': numbers_03},

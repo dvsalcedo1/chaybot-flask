@@ -46,6 +46,18 @@ rules = {
     'numbers_17': {'function': numbers_17, 'parts': ['headline', 'body'], 'ruleDesc': 'For internet speeds, put a space between the number and the unit of measurement'},
     'numbers_18': {'function': numbers_18, 'parts': ['headline', 'body'], 'ruleDesc': 'For temperatures, go straight to °C and °F.'},
     'numbers_19': {'function': numbers_19, 'parts': ['headline', 'body'], 'ruleDesc': 'Use Roman numerals for World War I and World War II.'},
+    'grammar_01': {'function': grammar_01, 'parts': ['headline', 'body'], 'ruleDesc': 'use results in, not results to'},
+    'grammar_02': {'function': grammar_02, 'parts': ['headline', 'body'], 'ruleDesc': 'dont use "for" after seek/sought'},
+    'grammar_03': {'function': grammar_03, 'parts': ['headline', 'body'], 'ruleDesc': 'dont use "as" after called/dubbed'},
+    'grammar_04': {'function': grammar_04, 'parts': ['headline', 'body'], 'ruleDesc': '"on the other hand" should have "on the one hand" in the same paragraph'},
+    'punctuation_01': {'function': punctuation_01, 'parts': ['headline', 'body'], 'ruleDesc': 'Use the Oxford or serial comma'},
+    'punctuation_02': {'function': punctuation_02, 'parts': ['headline', 'body'], 'ruleDesc': 'Capitalization after a colon:'},
+    'punctuation_03': {'function': punctuation_03, 'parts': ['headline', 'body'], 'ruleDesc': 'A dash is used to separate word/s. We commonly use the en dash (–), not the em dash (—), with spaces'},
+    'punctuation_04': {'function': punctuation_04, 'parts': ['headline', 'body'], 'ruleDesc': 'When words end with s, use just an apostrophe for the possessive form.'},
+    'politicolegal_01': {'function': politicolegal_01, 'parts': ['headline', 'body'], 'ruleDesc': 'It’s charged with, not charged of'},
+    'politicolegal_02': {'function': politicolegal_02, 'parts': ['headline', 'body'], 'ruleDesc': 'It’s indicted for, not indicted of.'},
+    'politicolegal_03': {'function': politicolegal_03, 'parts': ['headline', 'body'], 'ruleDesc': 'It’s plead guilty to, not plead guilty of.'},
+    'politicolegal_04': {'function': politicolegal_04, 'parts': ['headline', 'body'], 'ruleDesc': 'It’s convicted of and acquitted of, not for'}
 }
 
 def agg_details(input_content):

@@ -1,4 +1,5 @@
 import json
+import subprocess
 from rule_list import agg_details
 from flask import Flask, jsonify, request
 
@@ -25,6 +26,19 @@ def summarize_rules():
     }
 
     return jsonify({'details': details, 'summary': summary})
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    # You can add authentication if needed
+    if request.method == 'POST':
+        # Trigger a git pull
+        repo_path = './'  # Update this to your repo path
+        try:
+            subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
+            return jsonify({'status': 'success'}), 200
+        except subprocess.CalledProcessError as e:
+            return jsonify({'status': 'failed', 'error': str(e)}), 500
+    return jsonify({'status': 'invalid request'}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

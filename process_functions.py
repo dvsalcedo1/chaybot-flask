@@ -13,63 +13,140 @@ def head_01(text):
     else:
         return []
 
-def head_06(text,part):
+def head_06(text, **kwargs):
     """
-    Head-06: Headlines should not have long words
+    Head-06: Headlines shouldn’t have long words (more than 12 characters)
 
     Inputs needed: headline
     """
-    req = text[part]
-    res = { 'ruleCode': 'Head-06', 'ruleResult': '', 'resultDesc': '' }
+    long_words = [word for word in text.split() if len(word) > 12]
+    
+    offending_strings = []
+    for word in long_words:
+        match = re.search(r'\b' + re.escape(word) + r'\b', text)
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    return offending_strings
 
-    # wordlist = req.split(' ')
-
-    # res['ruleResult'] = 'PASS'
-    # for i in wordlist:
-    #     if len(i) > 10:
-    #         res['ruleResult'] = 'FAIL'
-    #         res['resultDesc'] = 'One of the words in the headline is too long'
-
-    return res
-
-def head_09(text,part):
+def head_09(text, **kwargs):
     """
     Head-09: Headlines should have single quotes and not double quotes
 
     Inputs needed: headline
     """
-    req = text[part]
-    res = { 'ruleCode': 'Head-09', 'ruleResult': '', 'resultDesc': '' }
+    offending_strings = []
+    matches = list(re.finditer(r'"(.*?)"', text))
 
-    res['ruleResult'] = 'PASS'
-    for i in req:
-        if i == "\"":
-            res['ruleResult'] = 'FAIL'
-            res['resultDesc'] = 'Use single quotes and not double quotes'
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    return offending_strings
 
-    return res
-
-def head_10(text,part):
+def head_10(text, **kwargs):
     """
     Head-10: Headlines should use en dash and not hyphen or colon when indicating source
 
     Inputs needed: headline
     """
-    req = text[part]
-    res = { 'ruleCode': 'Head-10', 'ruleResult': '', 'resultDesc': '' }
 
-    wordlist = req.split(" ")
-    colons = [i for i,n in enumerate(wordlist) if ":" in n]
-    hyphens = [i for i,n in enumerate(wordlist) if "-" in n]
-    checkNames = pos_tag([wordlist[j+1] for j in colons+hyphens])
+    offending_strings = []
+    matches = list(re.finditer(r'-|:', text))  # Checking for hyphen (-) or colon (:)
+    
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
 
-    res['ruleResult'] = 'PASS'
-    for i in checkNames:
-        if i[1] == 'NNP':
-            res['ruleResult'] = 'FAIL'
-            res['resultDesc'] = 'Use an en-dash and not a hyphen or double quote when indicating a source'
+# def head_11(text, **kwargs):
+#     '''Headlines should use digits and not spelled out numbers except for zero'''
+#     offending_strings = []
+#     number_pattern = r'\b(one|two|three|four|five|six|seven|eight|nine|ten)\b'
+#     matches = list(re.finditer(number_pattern, text, re.IGNORECASE))
+    
+#     for match in matches:
+#         start, end = match.start(), match.end()
+#         offending_strings.append(get_context(text, start, end, **kwargs))
+    
+#     return offending_strings
 
-    return res
+# def head_12(text, **kwargs):
+#     '''Headline word after colon should be capitalized'''
+#     offending_strings = []
+#     matches = list(re.finditer(r':\s[a-z]', text))  # Check if the first letter after colon is lowercase
+    
+#     for match in matches:
+#         start, end = match.start(), match.end()
+#         offending_strings.append(get_context(text, start, end, **kwargs))
+    
+#     return offending_strings
+
+# def subhead_01(text, **kwargs):
+#     '''Subhead should not exceed 200 characters'''
+#     if len(text) > 200:
+#         return [text[:200] + '...']
+#     return []
+
+# def subhead_06(text, **kwargs):
+#     '''Subhead should have single quotes and not double quotes'''
+#     offending_strings = []
+#     matches = list(re.finditer(r'"(.*?)"', text))
+    
+#     for match in matches:
+#         start, end = match.start(), match.end()
+#         offending_strings.append(get_context(text, start, end, **kwargs))
+    
+#     return offending_strings
+
+# def dateline_03(text, **kwargs):
+#     '''Metro Manila Dateline should use MANILA, PHILIPPINES'''
+#     if 'Manila, Philippines' in text:
+#         return ['Manila, Philippines']
+#     return []
+
+# def breaker_01(text, **kwargs):
+#     '''Breakers should be in H5 format'''
+#     #N/A
+#     return []
+
+# def breaker_02(text, **kwargs):
+#     '''Breakers should not exceed 4 words'''
+#     words = text.split()
+#     if len(words) > 4:
+#         return [text]
+#     return []
+
+# def breaker_05(text, **kwargs):
+#     '''Breakers use single quotes, not double quotes or italics'''
+#     offending_strings = []
+#     matches = list(re.finditer(r'["“”]', text))  # Matches both straight and curly quotes
+    
+#     for match in matches:
+#         start, end = match.start(), match.end()
+#         offending_strings.append(get_context(text, start, end, **kwargs))
+    
+#     return offending_strings
+
+# def url_01(text, **kwargs):
+#     '''URLs should have 11 words max'''
+#     if len(text.split()) > 11:
+#         return [text]
+#     return []
+
+# def url_04(text, **kwargs):
+#     '''URLs should not have punctuations'''
+#     offending_strings = []
+#     if re.search(r'[.,!?]', text):  # Check for any punctuation marks
+#         offending_strings.append(text)
+    
+#     return offending_strings
+
+# def url_06(text, **kwargs):
+#     '''URLs should not begin with a number'''
+#     if re.match(r'^\d', text):
+#         return [text]
+#     return []
+    
 
 def head_11(text,part):
     """
@@ -972,25 +1049,203 @@ def politicolegal_04(text, **kwargs):
         offending_strings.append(get_context(text, start, end, **kwargs))
     return offending_strings
 
-# rules = {
-#   # 'place_02': {'ruleDesc': 'URL should not contain CamSur or Gensan, it should be completely spelled out in the slug. They are acceptable everywhere else', 'function': place_02},
+def politicolegal_07(text, **kwargs):
+    '''It’s "right against self-incrimination", not "right to self-incrimination"'''
+    if 'right to self-incrimination' in text:
+        offending_strings = [get_context(text, text.index('right to self-incrimination'), 
+                                          text.index('right to self-incrimination') + 26, **kwargs)]
+        return offending_strings
+    return []
 
-#   'grammar_01': {'ruleDesc': 'use results in, not results to', 'function': grammar_01},
-#   'grammar_02': {'ruleDesc': 'dont use "for" after seek/sought', 'function': grammar_02},
-#   'grammar_03': {'ruleDesc': 'dont use "as" after called/dubbed', 'function': grammar_03},
-#   'grammar_04': {'ruleDesc': '"on the other hand" should have "on the one hand" in the same paragraph', 'function': grammar_04},
-#   'punctuation_01': {'ruleDesc': 'Use the Oxford or serial comma', 'function': punctuation_01},
-#   'punctuation_02': {'ruleDesc': 'Capitalization after a colon:', 'function': punctuation_02},
-#   'punctuation_03': {'ruleDesc': 'A dash is used to separate word/s. We commonly use the en dash (–), not the em dash (—), with spaces', 'function': punctuation_03},
-#   'punctuation_04': {'ruleDesc': 'When words end with s, use just an apostrophe for the possessive form.', 'function': punctuation_04},
-#   'politicolegal_01': {'ruleDesc': 'It’s charged with, not charged of', 'function': politicolegal_01},
-#   'politicolegal_02': {'ruleDesc': 'It’s indicted for, not indicted of.', 'function': politicolegal_02},
-#   'politicolegal_03': {'ruleDesc': 'It’s plead guilty to, not plead guilty of.', 'function': politicolegal_03},
-#   'politicolegal_04': {'ruleDesc': 'It’s convicted of and acquitted of, not for', 'function': politicolegal_04}
-#   }
+def politicolegal_15(text, **kwargs):
+    '''Show cause order, temporary restraining order, writ of amparo, writ of habeas corpus, writ of kalikasan, affidavit and similar should be lowercase'''
+    legal_terms = ['Show Cause Order', 'Temporary Restraining Order', 'Writ of Amparo', 'Writ of Habeas Corpus', 
+                   'Writ of Kalikasan', 'Affidavit']
+    offending_strings = []
+    for term in legal_terms:
+        if term in text:
+            match = re.search(term, text)
+            start, end = match.start(), match.end()
+            offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
 
-# def fix_format(func, result):
-#     '''Reformat output to align with API expectations'''
-#     return {'ruleCode': func.__name__, 
-#             'ruleResult': 'FAIL' if len(result) else 'PASS', 
-#             'resultDesc': rules[func.__name__]['ruleDesc']}
+def disasters_02(text, **kwargs):
+    '''Various weather systems are lowercase'''
+    weather_systems = ['Tropical Cyclone', 'Low Pressure Area', 'Intertropical Convergence Zone', 
+                       'Southwest Monsoon', 'Northeast Monsoon', 'Tail-end of a Frontal System', 'Easterlies']
+    offending_strings = []
+    for term in weather_systems:
+        if term in text:
+            match = re.search(term, text)
+            start, end = match.start(), match.end()
+            offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def disasters_07(text, **kwargs):
+    '''Use earthquake (not quake) in headlines and URLs. Quake is acceptable in the body'''
+    offending_strings = []
+    if 'quake' in text:
+        match = re.search('quake', text)
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def disasters_09(text, **kwargs):
+    '''For volcanoes, spell out "Mount" and not "Mt."'''
+    offending_strings = []
+    if 'Mt.' in text:
+        match = re.search('Mt\.', text)
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def health_01(text, **kwargs):
+    '''A pandemic is global. Just say pandemic, not "global pandemic"'''
+    offending_strings = []
+    if 'global pandemic' in text:
+        match = re.search('global pandemic', text)
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def health_02(text, **kwargs):
+    '''Coronavirus is acceptable on first mention. Add "the" before coronavirus'''
+    offending_strings = []
+    if 'coronavirus' in text and not 'the coronavirus' in text:
+        match = re.search('coronavirus', text)
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def health_03(text, **kwargs):
+    '''Use "COVID-19", not "Covid-19", "COVID", or "Covid"'''
+    offending_strings = []
+    covid_variants = ['Covid-19', 'COVID', 'Covid']
+    for variant in covid_variants:
+        if variant in text:
+            match = re.search(variant, text)
+            start, end = match.start(), match.end()
+            offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def race_02(text, **kwargs):
+    '''The plural form of Lumad is still Lumad, not Lumads'''
+    if 'Lumads' in text:
+        match = re.search('Lumads', text)
+        start, end = match.start(), match.end()
+        return [get_context(text, start, end, **kwargs)]
+    return []
+
+def race_04(text, **kwargs):
+    '''Capitalize "Black" when referring to race'''
+    offending_strings = []
+    matches = list(re.finditer(r'\bblack\b', text, re.IGNORECASE))
+    
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def gender_02(text, **kwargs):
+    '''It’s trans man/trans woman, not transman/transwoman'''
+    offending_strings = []
+    matches = list(re.finditer(r'transman|transwoman', text, re.IGNORECASE))
+    
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def gender_03(text, **kwargs):
+    '''"Transgender" is an adjective, do not use it as a noun'''
+    offending_strings = []
+    matches = list(re.finditer(r'\btransgender\b(?!\s(man|woman))', text, re.IGNORECASE))
+    
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def gender_04(text, **kwargs):
+    '''Use "they/them/their" instead of "he/she" or "him/her"'''
+    offending_strings = []
+    matches = list(re.finditer(r'he\/she|him\/her', text, re.IGNORECASE))
+    
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def photos_01(text, **kwargs):
+    '''Each photo caption begins with a title in all caps, no more than two words, followed by a period'''
+    # N/A - This would likely require more contextual info about the image and caption structure
+    return []
+
+def photos_02(text, **kwargs):
+    '''Photo caption should only be one sentence'''
+    if len(text.split('.')) > 1:
+        return [text]
+    return []
+
+def photos_05(text, **kwargs):
+    '''Photo caption should use single and not double quotes'''
+    offending_strings = []
+    matches = list(re.finditer(r'"(.*?)"', text))
+    
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    
+    return offending_strings
+
+def photos_06(text, **kwargs):
+    '''Photo caption date format should be Month Day, Year'''
+    offending_strings = []
+    matches = list(re.finditer(r'\b\d{4}-\d{2}-\d{2}\b', text))  # Matches "YYYY-MM-DD" format
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
+    return offending_strings
+
+def photos_08(text, **kwargs):
+    '''Photo credits should not contain "Photo by"'''
+    if 'Photo by' in text:
+        return [text]
+    return []
+
+def photos_12(text, **kwargs):
+    '''Reuters photos should use Name/Reuters or Original Source/Reuters'''
+    # N/A
+    return []
+
+def photos_15(text, **kwargs):
+    '''If the photo is a screenshot from a video, put "Rappler video screenshot"'''
+    if 'screengrab' in text:
+        match = re.search('screengrab', text)
+        start, end = match.start(), match.end()
+        return [get_context(text, start, end, **kwargs)]
+    return []
+
+def photos_16(text, **kwargs):
+    '''When in doubt about the source of a photo or unsure who to credit, do not use'''
+    # N/A - This would depend on external info
+    return []
+
+def hyperlinks_01(text, **kwargs):
+    '''Put hyperlinks in stories whenever applicable, aim for at least 3 or more'''
+    hyperlinks = re.findall(r'(https?://[^\s]+)', text)  # Finds URLs
+    if len(hyperlinks) < 3:
+        return [text]
+    return []
+

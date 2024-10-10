@@ -35,7 +35,7 @@ def webhook():
         repo_path = '.'  # Update this to your repo
         try:
             subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
-            subprocess.run(['sudo', 'systemctl', 'restart', 'app'], check=True)
+            # subprocess.run(['sudo', 'systemctl', 'restart', 'app'], check=True)
             return jsonify({'status': 'success'}), 200
         except subprocess.CalledProcessError as e:
             return jsonify({'status': 'failed', 'error': str(e)}), 500

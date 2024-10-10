@@ -16,14 +16,7 @@ def head_01(text):
 def head_06(text, **kwargs):
     '''Headlines shouldn’t have long words (more than 12 characters)'''
 
-    long_words = [word for word in text.split() if len(word) > 12]
-    
-    offending_strings = []
-    for word in long_words:
-        match = re.search(r'\b' + re.escape(word) + r'\b', text)
-        start, end = match.start(), match.end()
-        offending_strings.append(get_context(text, start, end, **kwargs))
-    return offending_strings
+    return [word for word in text.split() if len(word) > 12]
 
 def head_09(text, **kwargs):
     '''Headlines should have single quotes and not double quotes'''

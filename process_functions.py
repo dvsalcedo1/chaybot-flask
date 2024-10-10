@@ -71,22 +71,22 @@ def head_12(text, **kwargs):
     return offending_strings
 
 ## Subhead
-# def subhead_01(text, **kwargs):
-#     '''Subhead should not exceed 200 characters'''
-#     if len(text) > 200:
-#         return [text[:200] + '...']
-#     return []
+def subhead_01(text, **kwargs):
+    '''Subhead should not exceed 200 characters'''
+    if len(text) > 200:
+        return [text[:200] + '...']
+    return []
 
-# def subhead_06(text, **kwargs):
-#     '''Subhead should have single quotes and not double quotes'''
-#     offending_strings = []
-#     matches = list(re.finditer(r'"(.*?)"', text))
+def subhead_06(text, **kwargs):
+    '''Subhead should have single quotes and not double quotes'''
+    offending_strings = []
+    matches = list(re.finditer(r'"(.*?)"', text))
     
-#     for match in matches:
-#         start, end = match.start(), match.end()
-#         offending_strings.append(get_context(text, start, end, **kwargs))
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
     
-#     return offending_strings
+    return offending_strings
 
 
 

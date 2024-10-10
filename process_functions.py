@@ -88,40 +88,12 @@ def subhead_06(text, **kwargs):
     
     return offending_strings
 
-
-
 ## Dateline
-# def dateline_03(text,part):
-#     """
-#     Metro Manila dateline should use MANILA, PHILIPPINES
-
-#     Inputs needed: body
-#     """
-#     req = text[part]
-#     res = { 'ruleCode': 'Dateline-03', 'ruleResult': '', 'resultDesc': '' }
-
-#     dateline = ""
-#     res['ruleResult'] = 'PASS'
-#     if ("—" in req):
-#         dateline = req.split("—")[0][:-1]
-#         if len(dateline) < 100:
-#             if "metro manila" in dateline.lower():
-#                 res['ruleResult'] = 'FAIL'
-#                 res['resultDesc'] = 'Metro Manila dateline should use MANILA, PHILIPPINES'
-#         else:
-#             res['resultDesc'] = 'There was no dateline detected' 
-#     else:
-#         res['resultDesc'] = 'There was no dateline detected' # return pass if there is no dateline
-
-#     return res
-
-
-
-# def dateline_03(text, **kwargs):
-#     '''Metro Manila Dateline should use MANILA, PHILIPPINES'''
-#     if 'Manila, Philippines' in text:
-#         return ['Manila, Philippines']
-#     return []
+def dateline_03(text, **kwargs):
+    '''Metro Manila Dateline should use MANILA, PHILIPPINES'''
+    if 'Manila, Philippines' in text:
+        return ['Manila, Philippines']
+    return []
 
 ## Breaker
 # def breaker_01(text, **kwargs):
@@ -129,103 +101,45 @@ def subhead_06(text, **kwargs):
 #     #N/A
 #     return []
 
-# def breaker_02(text, **kwargs):
-#     '''Breakers should not exceed 4 words'''
-#     words = text.split()
-#     if len(words) > 4:
-#         return [text]
-#     return []
+def breaker_02(text, **kwargs):
+    '''Breakers should not exceed 4 words'''
+    words = text.split()
+    if len(words) > 4:
+        return [text]
+    return []
 
-# def breaker_05(text, **kwargs):
-#     '''Breakers use single quotes, not double quotes or italics'''
-#     offending_strings = []
-#     matches = list(re.finditer(r'["“”]', text))  # Matches both straight and curly quotes
+def breaker_05(text, **kwargs):
+    '''Breakers use single quotes, not double quotes or italics'''
+    offending_strings = []
+    matches = list(re.finditer(r'["“”]', text))  # Matches both straight and curly quotes
     
-#     for match in matches:
-#         start, end = match.start(), match.end()
-#         offending_strings.append(get_context(text, start, end, **kwargs))
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
     
-#     return offending_strings
+    return offending_strings
 
 
 ## URL
-def url_01(text,part):
-    """
-    URLs should have 11 words max
+def url_01(text, **kwargs):
+    '''URLs should have 11 words max'''
+    if len(text.split()) > 11:
+        return [text]
+    return []
 
-    Inputs needed: body
-    """
-    req = text[part]
-    res = { 'ruleCode': 'Url-01', 'ruleResult': '', 'resultDesc': '' }
-
-    url = req.split("/")[-2]
-    res['ruleResult'] = 'PASS'
-    if len(url.split("-")) > 11:
-        res['ruleResult'] = 'FAIL'
-        res['resultDesc'] = 'URLs should have 11 words max'
-
-    return res
-
-def url_04(text,part):
-    """
-    URLs should not have punctuations
-
-    Inputs needed: body
-    """
-    req = text[part]
-    res = { 'ruleCode': 'Url-04', 'ruleResult': '', 'resultDesc': '' }
-
-    url = req.split("/")[-2]
-    res['ruleResult'] = 'PASS'
-    for i in url.split("-"):
-        if not i.isalnum():
-            res['ruleResult'] = 'FAIL'
-            res['resultDesc'] = 'URLs should not have punctuations'
-
-    return res
-
-def url_06(text,part):
-    """
-    URLs should not begin with a number
-
-    Inputs needed: body
-    """
-    req = text[part]
-    res = { 'ruleCode': 'Url-06', 'ruleResult': '', 'resultDesc': '' }
-
-    url = req.split("/")[-2]
-    res['ruleResult'] = 'PASS'
-    if url.split("-")[0].isdigit():
-        res['ruleResult'] = 'FAIL'
-        res['resultDesc'] = 'URLs should not begin with a number'
-
-    return res
-
-
-
-
-
-
-
-# def url_01(text, **kwargs):
-#     '''URLs should have 11 words max'''
-#     if len(text.split()) > 11:
-#         return [text]
-#     return []
-
-# def url_04(text, **kwargs):
-#     '''URLs should not have punctuations'''
-#     offending_strings = []
-#     if re.search(r'[.,!?]', text):  # Check for any punctuation marks
-#         offending_strings.append(text)
+def url_04(text, **kwargs):
+    '''URLs should not have punctuations'''
+    offending_strings = []
+    if re.search(r'[.,!?]', text):  # Check for any punctuation marks
+        offending_strings.append(text)
     
-#     return offending_strings
+    return offending_strings
 
-# def url_06(text, **kwargs):
-#     '''URLs should not begin with a number'''
-#     if re.match(r'^\d', text):
-#         return [text]
-#     return []
+def url_06(text, **kwargs):
+    '''URLs should not begin with a number'''
+    if re.match(r'^\d', text):
+        return [text]
+    return []
 
 
 ## Name

@@ -29,7 +29,7 @@ def summarize_rules():
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    # You can add authentication if needed test
+    # You can add authentication if needed
     if request.method == 'POST':
         # Trigger a git pull
         repo_path = '.'  # Update this to your repo

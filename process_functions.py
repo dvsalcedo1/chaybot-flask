@@ -5,7 +5,7 @@ import re
 
 nlp = spacy.load('en_core_web_lg')
 
-### Headline
+## Headline
 def head_01(text):
     '''Headlines should not exceeed 70 characters'''
     if len(text) > 70:
@@ -14,11 +14,8 @@ def head_01(text):
         return []
 
 def head_06(text, **kwargs):
-    """
-    Head-06: Headlines shouldn’t have long words (more than 12 characters)
+    '''Headlines shouldn’t have long words (more than 12 characters)'''
 
-    Inputs needed: headline
-    """
     long_words = [word for word in text.split() if len(word) > 12]
     
     offending_strings = []
@@ -29,11 +26,7 @@ def head_06(text, **kwargs):
     return offending_strings
 
 def head_09(text, **kwargs):
-    """
-    Head-09: Headlines should have single quotes and not double quotes
-
-    Inputs needed: headline
-    """
+    '''Headlines should have single quotes and not double quotes'''
     offending_strings = []
     matches = list(re.finditer(r'"(.*?)"', text))
 
@@ -43,11 +36,7 @@ def head_09(text, **kwargs):
     return offending_strings
 
 def head_10(text, **kwargs):
-    """
-    Head-10: Headlines should use en dash and not hyphen or colon when indicating source
-
-    Inputs needed: headline
-    """
+    '''Headlines should use en dash and not hyphen or colon when indicating source'''
 
     offending_strings = []
     matches = list(re.finditer(r'-|:', text))  # Checking for hyphen (-) or colon (:)
@@ -58,29 +47,30 @@ def head_10(text, **kwargs):
     
     return offending_strings
 
-# def head_11(text, **kwargs):
-#     '''Headlines should use digits and not spelled out numbers except for zero'''
-#     offending_strings = []
-#     number_pattern = r'\b(one|two|three|four|five|six|seven|eight|nine|ten)\b'
-#     matches = list(re.finditer(number_pattern, text, re.IGNORECASE))
+def head_11(text, **kwargs):
+    '''Headlines should use digits and not spelled out numbers except for zero'''
+    offending_strings = []
+    number_pattern = r'\b(one|two|three|four|five|six|seven|eight|nine|ten)\b'
+    matches = list(re.finditer(number_pattern, text, re.IGNORECASE))
     
-#     for match in matches:
-#         start, end = match.start(), match.end()
-#         offending_strings.append(get_context(text, start, end, **kwargs))
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
     
-#     return offending_strings
+    return offending_strings
 
-# def head_12(text, **kwargs):
-#     '''Headline word after colon should be capitalized'''
-#     offending_strings = []
-#     matches = list(re.finditer(r':\s[a-z]', text))  # Check if the first letter after colon is lowercase
+def head_12(text, **kwargs):
+    '''Headline word after colon should be capitalized'''
+    offending_strings = []
+    matches = list(re.finditer(r':\s[a-z]', text))  # Check if the first letter after colon is lowercase
     
-#     for match in matches:
-#         start, end = match.start(), match.end()
-#         offending_strings.append(get_context(text, start, end, **kwargs))
+    for match in matches:
+        start, end = match.start(), match.end()
+        offending_strings.append(get_context(text, start, end, **kwargs))
     
-#     return offending_strings
+    return offending_strings
 
+## Subhead
 # def subhead_01(text, **kwargs):
 #     '''Subhead should not exceed 200 characters'''
 #     if len(text) > 200:
@@ -98,12 +88,42 @@ def head_10(text, **kwargs):
     
 #     return offending_strings
 
+
+
+## Dateline
+# def dateline_03(text,part):
+#     """
+#     Metro Manila dateline should use MANILA, PHILIPPINES
+
+#     Inputs needed: body
+#     """
+#     req = text[part]
+#     res = { 'ruleCode': 'Dateline-03', 'ruleResult': '', 'resultDesc': '' }
+
+#     dateline = ""
+#     res['ruleResult'] = 'PASS'
+#     if ("—" in req):
+#         dateline = req.split("—")[0][:-1]
+#         if len(dateline) < 100:
+#             if "metro manila" in dateline.lower():
+#                 res['ruleResult'] = 'FAIL'
+#                 res['resultDesc'] = 'Metro Manila dateline should use MANILA, PHILIPPINES'
+#         else:
+#             res['resultDesc'] = 'There was no dateline detected' 
+#     else:
+#         res['resultDesc'] = 'There was no dateline detected' # return pass if there is no dateline
+
+#     return res
+
+
+
 # def dateline_03(text, **kwargs):
 #     '''Metro Manila Dateline should use MANILA, PHILIPPINES'''
 #     if 'Manila, Philippines' in text:
 #         return ['Manila, Philippines']
 #     return []
 
+## Breaker
 # def breaker_01(text, **kwargs):
 #     '''Breakers should be in H5 format'''
 #     #N/A
@@ -127,132 +147,8 @@ def head_10(text, **kwargs):
     
 #     return offending_strings
 
-# def url_01(text, **kwargs):
-#     '''URLs should have 11 words max'''
-#     if len(text.split()) > 11:
-#         return [text]
-#     return []
 
-# def url_04(text, **kwargs):
-#     '''URLs should not have punctuations'''
-#     offending_strings = []
-#     if re.search(r'[.,!?]', text):  # Check for any punctuation marks
-#         offending_strings.append(text)
-    
-#     return offending_strings
-
-# def url_06(text, **kwargs):
-#     '''URLs should not begin with a number'''
-#     if re.match(r'^\d', text):
-#         return [text]
-#     return []
-    
-
-def head_11(text,part):
-    """
-    Head-11: Headlines should use digits and not spelled out numbers except for zero
-
-    Inputs needed: headline
-    """
-    req = text[part]
-    res = { 'ruleCode': 'Head-11', 'ruleResult': '', 'resultDesc': '' }
-
-    wordlist = req.lower().split(" ")
-    numbers = ['one','two','three','four','five','six','seven','eight','nine','ten',
-               'eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen',
-               'twenty','thirty','fourty','fifty','sixty','seventy','eighty','ninety']
-    
-    res['ruleResult'] = 'PASS'
-    for i in wordlist:
-        if i in numbers:
-            res['ruleResult'] = 'FAIL'
-            res['resultDesc'] = 'Do not spell out numbers in the title. Use numerical digits instead.'
-        if i == '0':
-            res['ruleResult'] = 'FAIL'
-            res['resultDesc'] += ' Spell out \"zero\" instead of using \"0\"'                        
-
-    return res
-
-def head_12(text,part):
-    """
-    Head-12: Headline word after colon should be capitalized
-
-    Inputs needed: headline
-    """
-    req = text[part]
-    res = { 'ruleCode': 'Head-12', 'ruleResult': '', 'resultDesc': '' }
-
-    wordlist = req.split(" ")
-    colons = [i for i,n in enumerate(wordlist) if ":" in n]
-    checkCapitalization = [wordlist[j+1] for j in colons]
-
-    res['ruleResult'] = 'PASS'
-    for i in checkCapitalization:
-        if i[0].isalpha() and i[0].islower():
-            res['ruleResult'] = 'FAIL'
-            res['resultDesc'] = 'Capitalize the next word after every colon'
-
-    return res
-
-### Subhead
-def subhead_01(text,part):
-    """
-    Subhead-01: Subhead should not exceed 200 characters
-
-    Inputs needed: subhead 
-    """
-    req = text[part]
-    res = { 'ruleCode': 'Subhead-01', 'ruleResult': '', 'resultDesc': '' }
-
-    if len(req) < 200:
-        res['ruleResult'] = 'PASS'
-    else:
-        res['ruleResult'] = 'FAIL'
-        res['resultDesc'] = 'Subhead should not exceed 200 characters'
-
-    return res
-
-def subhead_06(text,part):
-    """
-    Subhead-06: Subhead should have single quotes and not double quotes
-
-    Inputs needed: subhead
-    """
-    req = text[part]
-    res = { 'ruleCode': 'Subhead-06', 'ruleResult': '', 'resultDesc': '' }
-
-    res['ruleResult'] = 'PASS'
-    for i in req:
-        if i == "\"":
-            res['ruleResult'] = 'FAIL'
-            res['resultDesc'] = 'Subhead should have single quotes and not double quotes'
-
-### Dateline
-def dateline_03(text,part):
-    """
-    Metro Manila dateline should use MANILA, PHILIPPINES
-
-    Inputs needed: body
-    """
-    req = text[part]
-    res = { 'ruleCode': 'Dateline-03', 'ruleResult': '', 'resultDesc': '' }
-
-    dateline = ""
-    res['ruleResult'] = 'PASS'
-    if ("—" in req):
-        dateline = req.split("—")[0][:-1]
-        if len(dateline) < 100:
-            if "metro manila" in dateline.lower():
-                res['ruleResult'] = 'FAIL'
-                res['resultDesc'] = 'Metro Manila dateline should use MANILA, PHILIPPINES'
-        else:
-            res['resultDesc'] = 'There was no dateline detected' 
-    else:
-        res['resultDesc'] = 'There was no dateline detected' # return pass if there is no dateline
-
-    return res
-
-### URL
+## URL
 def url_01(text,part):
     """
     URLs should have 11 words max
@@ -304,6 +200,33 @@ def url_06(text,part):
         res['resultDesc'] = 'URLs should not begin with a number'
 
     return res
+
+
+
+
+
+
+
+# def url_01(text, **kwargs):
+#     '''URLs should have 11 words max'''
+#     if len(text.split()) > 11:
+#         return [text]
+#     return []
+
+# def url_04(text, **kwargs):
+#     '''URLs should not have punctuations'''
+#     offending_strings = []
+#     if re.search(r'[.,!?]', text):  # Check for any punctuation marks
+#         offending_strings.append(text)
+    
+#     return offending_strings
+
+# def url_06(text, **kwargs):
+#     '''URLs should not begin with a number'''
+#     if re.match(r'^\d', text):
+#         return [text]
+#     return []
+
 
 ## Name
 def name_01(text, **kwargs):

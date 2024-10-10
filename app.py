@@ -32,7 +32,7 @@ def webhook():
     # You can add authentication if needed
     if request.method == 'POST':
         # Trigger a git pull
-        repo_path = './'  # Update this to your repo path
+        repo_path = '.'  # Update this to your repo path
         try:
             subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
             return jsonify({'status': 'success'}), 200
